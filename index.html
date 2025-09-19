@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MUSEO — Retro iTunes Player</title>
+<style>
+  body {margin:0; font-family:Helvetica, Arial, sans-serif; background:#dcdcdc; color:#111;}
+  .topbar {background:#e3e3e3; border-bottom:1px solid #aaa; padding:6px; display:flex; align-items:center; gap:6px;}
+  .btn {width:22px;height:22px;border:1px solid #888;border-radius:50%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;}
+  .sidebar {width:180px;background:#f0f0f0;border-right:1px solid #aaa;padding:10px;font-size:14px;}
+  .sidebar h3 {font-size:12px;color:#555;margin:8px 0 4px;}
+  .sidebar div {padding:4px;cursor:pointer;}
+  .sidebar div:hover {background:#cce;}
+  .main {flex:1;display:flex;flex-direction:column;}
+  .songlist {flex:1;overflow:auto;}
+  table {width:100%;border-collapse:collapse;font-size:13px;}
+  th, td {padding:6px 8px;text-align:left;border-bottom:1px solid #ddd;}
+  th {background:#eee;color:#333;font-weight:normal;font-size:12px;}
+  .statusbar {padding:4px 10px;font-size:12px;background:#eee;border-top:1px solid #aaa;color:#444;}
+  .container {display:flex;height:100vh;}
+  audio {width:100%;margin-top:6px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="btn" onclick="prevSong()">⏮</div>
+  <div class="btn" onclick="playSong()">▶</div>
+  <div class="btn" onclick="pauseSong()">⏸</div>
+  <div class="btn" onclick="stopSong()">⏹</div>
+  <div class="btn" onclick="nextSong()">⏭</div>
+  <div style="flex:1;text-align:center;font-size:14px;font-weight:bold;">🎶 MUSEO — Retro Player</div>
+</div>
+
+<div class="container">
+  <div class="sidebar">
+    <h3>Library</h3>
+    <div>Music</div>
+    <div>Videos</div>
+    <h3>Playlists</h3>
+    <div onclick="loadSong(0)">🔥 DesierTÚ</div>
+    <div onclick="loadSong(6)">🧛 LOGAN</div>
+    <div onclick="loadSong(9)">🎹 Type Beat</div>
+    <h3>Store</h3>
+    <div onclick="window.open('https://open.spotify.com/artist/...','_blank')">Spotify</div>
+    <div onclick="window.open('https://music.youtube.com','_blank')">YouTube Music</div>
+  </div>
+
+  <div class="main">
+    <div class="songlist">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40%">Name</th>
+            <th style="width:25%">Artist</th>
+            <th style="width:25%">Album</th>
+            <th style="width:10%">Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr onclick="loadSong(0)"><td>DesierTÚ (Ft. Mych)</td><td>MUSEO</td><td>Single</td><td>3:10</td></tr>
+          <tr onclick="loadSong(1)"><td>Amor de Veranu</td><td>MUSEO</td><td>Single</td><td>2:45</td></tr>
+          <tr onclick="loadSong(2)"><td>Trap16</td><td>MUSEO</td><td>Trap Era</td><td>3:20</td></tr>
+          <tr onclick="loadSong(3)"><td>Session #02 (Museo, Dilow)</td><td>MUSEO, Dilow</td><td>Sessions</td><td>3:50</td></tr>
+          <tr onclick="loadSong(4)"><td>Tarde (Dilow, Museo, Derexs)</td><td>Dilow, MUSEO, Derexs</td><td>Collab</td><td>4:00</td></tr>
+          <tr onclick="loadSong(5)"><td>Como LEGO (Reggaeton Ver.)</td><td>MUSEO, Mych</td><td>Single</td><td>3:12</td></tr>
+          <tr onclick="loadSong(6)"><td>LOGAN</td><td>MUSEO</td><td>Single</td><td>2:58</td></tr>
+          <tr onclick="loadSong(7)"><td>Como LEGO (Official Ver.)</td><td>MUSEO Ft. Mych</td><td>Single</td><td>3:25</td></tr>
+          <tr onclick="loadSong(8)"><td>Reggaeton Old</td><td>MUSEO</td><td>Old School</td><td>3:05</td></tr>
+          <tr onclick="loadSong(9)"><td>Type Beat (Prod Mych x Certad)</td><td>MUSEO</td><td>Beat Official</td><td>3:40</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="padding:10px;">
+      <img id="cover" src="Inspirations/1.jpg" alt="cover" style="max-height:120px; display:block; margin:auto;">
+      <audio id="player" controls>
+        <source src="songs/desiertu_ft_mych.mp3" type="audio/mpeg">
+        Tu navegador no soporta audio.
+      </audio>
+    </div>
+    <div class="statusbar" id="status">Ready</div>
+  </div>
+</div>
+
+<script>
+  const songs = [
+    {file:"songs/desiertu_ft_mych.mp3", cover:"Inspirations/1.jpg", title:"DesierTÚ (Ft. Mych)"},
+    {file:"songs/amor_de_veranu.mp3", cover:"Inspirations/2.jpg", title:"Amor de Veranu"},
+    {file:"songs/trap16.mp3", cover:"Inspirations/3.jpg", title:"Trap16"},
+    {file:"songs/session_02_museo_dilow.mp3", cover:"Inspirations/4.jpg", title:"Session #02 (Museo, Dilow)"},
+    {file:"songs/tarde_dilow_museo_derexs.mp3", cover:"Inspirations/5.jpg", title:"Tarde (Dilow, Museo, Derexs)"},
+    {file:"songs/como_lego_reggaeton.mp3", cover:"Inspirations/6.jpg", title:"Como LEGO (Reggaeton Ver.)"},
+    {file:"songs/logan.mp3", cover:"Inspirations/7.jpg", title:"LOGAN"},
+    {file:"songs/como_lego_official.mp3", cover:"Inspirations/8.jpg", title:"Como LEGO (Official Ver.)"},
+    {file:"songs/reggaeton_old.mp3", cover:"Inspirations/9.jpg", title:"Reggaeton Old"},
+    {file:"songs/type_beat_prod_mych_certad.mp3", cover:"Inspirations/10.jpg", title:"Type Beat (Prod Mych x Certad)"}
+  ];
+
+  let currentSong = 0;
+  const player = document.getElementById("player");
+  const cover = document.getElementById("cover");
+  const status = document.getElementById("status");
+
+  function loadSong(i) {
+    currentSong = i;
+    player.src = songs[i].file;
+    cover.src = songs[i].cover;
+    player.play();
+    status.innerText = "Reproduciendo: " + songs[i].title;
+  }
+  function playSong(){ player.play(); }
+  function pauseSong(){ player.pause(); }
+  function stopSong(){ player.pause(); player.currentTime=0; }
+  function prevSong(){ loadSong((currentSong-1+songs.length)%songs.length); }
+  function nextSong(){ loadSong((currentSong+1)%songs.length); }
+</script>
+
+</body>
+</html>
